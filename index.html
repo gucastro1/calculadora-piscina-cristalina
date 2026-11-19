@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Calculadora de Doses da Sua Piscina</title><meta name="robots" content="noindex">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:#D7EEF3;color:#0E2A3B;padding:16px}
+.wrap{max-width:520px;margin:0 auto;background:#fff;border-radius:24px;padding:22px 18px 26px;box-shadow:0 8px 24px rgba(10,60,90,.12)}
+h1{font-size:25px;line-height:1.15;color:#0B3954;text-align:center}
+h1 span{color:#0FA3B1}
+.sub{text-align:center;font-size:15px;color:#24526B;margin:8px 0 18px;font-weight:600}
+.step{background:#F4FBFD;border:2px solid #BFE3EC;border-radius:18px;padding:14px;margin-top:14px}
+.step h2{font-size:15px;letter-spacing:1px;color:#0A7FA0;margin-bottom:10px}
+.tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.tabs button{border:2px solid #BFE3EC;background:#fff;border-radius:12px;padding:12px 6px;font-size:15px;font-weight:700;color:#0B3954}
+.tabs button.on{background:#0B4F6C;border-color:#0B4F6C;color:#fff}
+label{display:block;font-size:14px;font-weight:700;margin:10px 0 4px;color:#24526B}
+input{width:100%;font-size:20px;padding:12px;border:2px solid #BFE3EC;border-radius:12px;font-weight:700;color:#0B3954}
+input:focus{outline:none;border-color:#0FA3B1}
+.vol{margin-top:14px;text-align:center;background:linear-gradient(120deg,#0B4F6C,#0A7FA0);color:#fff;border-radius:16px;padding:14px}
+.vol small{display:block;font-size:13px;letter-spacing:1px;opacity:.85}
+.vol b{font-size:30px}
+.row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid #D5ECF2}
+.row:last-child{border-bottom:0}
+.row span{font-size:15px;font-weight:700;line-height:1.25}
+.row span i{display:block;font-style:normal;font-weight:500;font-size:13px;color:#5C7F90}
+.row b{font-size:20px;color:#1F7A45;white-space:nowrap}
+.warn{margin-top:14px;background:#FFF4DC;border:2px solid #F1D08A;border-radius:14px;padding:12px;font-size:14px;font-weight:700;color:#7A5410;line-height:1.35}
+.hide{display:none}
+</style></head><body><div class="wrap">
+<h1>Calculadora de Doses<br><span>da Sua Piscina</span></h1>
+<p class="sub">Coloque o tamanho da piscina e veja a dose certa de cada produto.</p>
+
+<div class="step"><h2>1 · FORMATO DA PISCINA</h2>
+<div class="tabs" id="tabs">
+<button data-f="ret" class="on">Retangular</button><button data-f="red">Redonda</button>
+<button data-f="ova">Oval</button><button data-f="lit">Sei a litragem</button></div>
+<div id="fRet"><label>Comprimento (metros)</label><input id="c" inputmode="decimal" placeholder="ex: 6">
+<label>Largura (metros)</label><input id="l" inputmode="decimal" placeholder="ex: 3"></div>
+<div id="fRed" class="hide"><label>Diâmetro (metros)</label><input id="d" inputmode="decimal" placeholder="ex: 3,6"></div>
+<div id="fP"><label>Profundidade da parte rasa (metros)</label><input id="p1" inputmode="decimal" placeholder="ex: 1,2">
+<label>Profundidade da parte funda (metros)</label><input id="p2" inputmode="decimal" placeholder="ex: 1,6"></div>
+<div id="fLit" class="hide"><label>Litragem da piscina (litros)</label><input id="lt" inputmode="numeric" placeholder="ex: 5000"></div>
+<div class="vol"><small>SUA PISCINA TEM</small><b id="vol">—</b></div></div>
+
+<div class="step"><h2>2 · ALCALINIDADE (opcional)</h2>
+<label>Quanto deu no teste? (ppm)</label><input id="alc" inputmode="numeric" placeholder="ex: 60"></div>
+
+<div class="step"><h2>3 · SUAS DOSES</h2><div id="out">
+<div class="row"><span>Cloro granulado de manutenção<i>todo dia, à noite</i></span><b id="o1">—</b></div>
+<div class="row"><span>Cloro granulado de choque<i>uma vez, à noite</i></span><b id="o2">—</b></div>
+<div class="row"><span>Algicida de choque<i>água verde</i></span><b id="o3">—</b></div>
+<div class="row"><span>Algicida de manutenção<i>1 vez por semana</i></span><b id="o4">—</b></div>
+<div class="row"><span>Sulfato de alumínio (decantador)<i>água turva</i></span><b id="o5">—</b></div>
+<div class="row"><span>Elevador de alcalinidade<i id="o6i">para subir 10 ppm</i></span><b id="o6">—</b></div>
+<div class="row"><span>Redutor ou elevador de pH<i>espere 2 h e meça de novo</i></span><b>metade do rótulo</b></div>
+</div>
+<div class="warn">Doses de referência para produtos comuns. Sempre confira o rótulo do seu produto. Dissolva cada produto em água separada e nunca misture produtos no mesmo balde.</div></div>
+</div>
+<script>
+var f='ret',$=function(i){return document.getElementById(i)};
+function n(i){var v=($(i).value||'').replace(',','.');return parseFloat(v)||0}
+function fmt(x,u){if(u==='g'&&x>=1000)return (x/1000).toFixed(1).replace('.',',').replace(',0','')+' kg';if(u==='ml'&&x>=1000)return (x/1000).toFixed(1).replace('.',',').replace(',0','')+' L';return Math.round(x).toLocaleString('pt-BR')+' '+u}
+function calc(){var m3=0,pm=(n('p1')+n('p2'))/2;if(n('p1')&&!n('p2'))pm=n('p1');if(!n('p1')&&n('p2'))pm=n('p2');
+if(f==='ret')m3=n('c')*n('l')*pm;else if(f==='red')m3=n('d')*n('d')*pm*0.785;else if(f==='ova')m3=n('c')*n('l')*pm*0.89;else m3=n('lt')/1000;
+if(!(m3>0)){['o1','o2','o3','o4','o5','o6'].forEach(function(k){$(k).textContent='—'});$('vol').textContent='—';return}
+$('vol').textContent=Math.round(m3*1000).toLocaleString('pt-BR')+' litros ('+m3.toFixed(1).replace('.',',')+' m³)';
+$('o1').textContent=fmt(4*m3,'g');$('o2').textContent=fmt(12*m3,'g')+' a '+fmt(15*m3,'g');
+$('o3').textContent=fmt(6*m3,'ml');$('o4').textContent=fmt(2*m3,'ml');$('o5').textContent=fmt(40*m3,'g');
+var a=n('alc');if(a>0){if(a>=80){$('o6').textContent='não precisa';$('o6i').textContent='a sua já está na faixa (80 a 120)'}else{$('o6').textContent=fmt((100-a)/10*17*m3,'g');$('o6i').textContent='para subir de '+a+' para 100 ppm'}}else{$('o6').textContent=fmt(17*m3,'g');$('o6i').textContent='para subir 10 ppm'}}
+$('tabs').addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;f=b.dataset.f;[].forEach.call(this.children,function(x){x.classList.toggle('on',x===b)});
+$('fRet').classList.toggle('hide',!(f==='ret'||f==='ova'));$('fRed').classList.toggle('hide',f!=='red');$('fP').classList.toggle('hide',f==='lit');$('fLit').classList.toggle('hide',f!=='lit');calc()});
+document.addEventListener('input',calc);
+</script></body></html>
